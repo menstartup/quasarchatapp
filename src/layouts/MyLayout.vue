@@ -15,11 +15,19 @@
           {{title}}
         </q-toolbar-title>
         <q-btn 
+          v-if="userDetail.name"
           class="absolute-right q-mr-sm"
           icon="account_circle"
           dense
           flat 
-          label="Login" />
+          :label="userDetail.name" />
+          <q-btn
+          v-else 
+          class="absolute-right q-mr-sm"
+          icon="account_circle"
+          dense
+          flat 
+          label="login" />
       </q-toolbar>
     </q-header>
     <q-page-container>
@@ -29,6 +37,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MyLayout',
 
@@ -37,10 +46,18 @@ export default {
 
     }
   },
+  mounted() {
+    this.handleAuthStageChanged()
+  },
   created() {
     console.log(this.$route, 'test route')
+    console.log(this.userDetail, 'userDetail')
   },
   computed: {
+    ...mapState('store', ['userInfo']),
+    userDetail() {
+      return this.userInfo
+    },
     title() {
       let title = ''
       let fullPath = this.$route.fullPath
@@ -53,6 +70,9 @@ export default {
       }
       return title
     }
+  },
+  methods: {
+    ...mapActions('store', ['handleAuthStageChanged'])
   }
 }
 </script>

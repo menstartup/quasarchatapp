@@ -36,6 +36,17 @@
       color="primary" 
       />
     </div>
+    <div 
+    class="flex cloumn col"
+    >
+      <q-btn 
+      @click="onSignout"
+      class="flex col flex-end q-mt-sm" 
+      label="Logout" 
+      color="primary" 
+      />
+    </div>
+    
   </q-form>
 </template>
 
@@ -58,14 +69,17 @@ export default {
         console.log(this.tab, typeof(this.tab), 'tab')
     },
     methods: {
-        ...mapActions('store', ['register']),
+        ...mapActions('store', ['register', 'login', 'signOut']),
         onSubmit() {
             if(this.tab == 'login') {
-                console.log('login')
+                this.login(this.formdata)
             } else {
                 this.register(this.formdata)
             }
         },
+        onSignout() {
+            this.signOut()
+        }
     }
 };
 </script>
