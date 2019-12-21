@@ -1,0 +1,74 @@
+<template>
+    <q-form 
+    class="q-gutter-md">
+    <q-input
+      v-if="tab == 'register'"
+      v-model="formdata.name"
+      filled
+      label="Your name *"
+      lazy-rules
+      :rules="[ val => val && val.length > 0 || 'Please type your name']"
+    />
+    <q-input
+      v-model="formdata.email"
+      filled
+      label="Your email *"
+      lazy-rules
+      :rules="[ val => val && val.length > 0 || 'Please type your email']"
+    />
+    <q-input
+      v-model="formdata.password"
+      filled
+      type="password"
+      label="Your password *"
+      lazy-rules
+      :rules="[
+                  val => val !== null && val !== '' || 'Please type your password'
+              ]"
+    />
+    <div 
+    class="flex cloumn col"
+    >
+      <q-btn 
+      @click="onSubmit"
+      class="flex col flex-end" 
+      label="Register" 
+      color="primary" 
+      />
+    </div>
+  </q-form>
+</template>
+
+<script>
+
+import { mapActions } from 'vuex'
+
+export default {
+    props: ['tab'],
+    data() {
+        return {
+            formdata: {
+                name: '',
+                email: '',
+                password: ''
+            }
+        }
+    },
+    created()  {
+        console.log(this.tab, typeof(this.tab), 'tab')
+    },
+    methods: {
+        ...mapActions('store', ['register']),
+        onSubmit() {
+            if(this.tab == 'login') {
+                console.log('login')
+            } else {
+                this.register(this.formdata)
+            }
+        },
+    }
+};
+</script>
+
+<style>
+</style>
