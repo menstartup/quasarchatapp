@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.handleAuthStageChanged()
+    // this.handleAuthStageChanged()
   },
   created() {
     console.log(this.$route, 'test route')

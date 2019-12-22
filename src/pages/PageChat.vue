@@ -6,9 +6,9 @@
        class="q-pa-md column col justify-end"
       >
         <q-chat-message
-            v-for="(message, index) in conversations"
+            v-for="(message, index) in allMessage"
             :key="index"
-            :name="message.from == 'me' ? 'me' : 'Lucy'"
+            :name="message.from == 'me' ? userInfo.name : mixin"
             :avatar="message.avatar"
             :text="[message.text]"
             stamp="7 minutes ago"
@@ -62,35 +62,20 @@
 </template>
 
 <script>
+
+import { mapActions, mapState } from 'vuex'
+import mixinDetail from 'src/mixin/mixin.js'
 export default {
+    mixin: [mixinDetail],
     data() {
         return {
             message: '',
-            conversations: [
-                {
-                    text: 'hey, how are you?',
-                    from: 'me',
-                    avatar: 'https://cdn.quasar.dev/img/avatar4.jpg'
-                },
-                {
-                    text: [
-                           'doing fine, how r you?',
-                           'I just feel like typing a really, really, REALY long message to annoy you...'
-                          ],
-                    from: 'them',
-                    avatar: 'https://cdn.quasar.dev/img/avatar5.jpg'
-                },
-                {
-                    text: 'Did it work?',
-                    from: 'me',
-                    avatar: 'https://cdn.quasar.dev/img/avatar4.jpg'
-                },
-            ]
         }
     },
     methods: {
+        ...mapActions('store', ['getMessgaeFromFirebase', 'getClearMessageFromFirebase', 'getOtherUser']),
         onSendMessage() {
-            this.conversations.push(
+            this.allMessage.push(
                 {
                     text: this.message,
                     from: 'me',
@@ -98,6 +83,19 @@ export default {
                 }
             )
         }
+    },
+    computed: {
+        ...mapState('store', ['allMessage', 'userInfo', 'otherUser', 'users']),
+    },
+    created() {
+        
+        this.getOtherUser(this.$route.params.otheruserid)
+        this.getMessgaeFromFirebase(this.$route.params.otheruserid)
+        console.log(this.otherUser, 'other userrrrrrrr')
+        // console.log(this.onChatUser)
+    },
+    destroyed() {
+        this.getClearMessageFromFirebase()
     }
 }
 </script>

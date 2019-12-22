@@ -4,9 +4,9 @@
      class="q-mt-sm"
     >
       <q-item 
-        to="/Chat"
-        v-for="user in users" 
-        :key="user.id" 
+        v-for="(user, key) in getUsers" 
+        :to="'/Chat/'+key"
+        :key="key" 
         clickable 
         v-ripple
       >
@@ -34,35 +34,27 @@
 </template>
 
 <script>
-const users = [
-  {
-    id: 1,
-    name: "Ruddy Jedrzej",
-    online: true
-  },
-  {
-    id: 2,
-    name: "Mallorie Alessandrini",
-    online: true
-  },
-  {
-    id: 3,
-    name: "Elisabetta Wicklen",
-    online: false
-  },
-  {
-    id: 4,
-    name: "Seka Fawdrey",
-    online: true
-  }
-];
+
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      users,
-      message: ''
+      message: '',
     };
+  },
+  created() {
+    // this.getMessgaeFromFirebase(this.getUsers)
+    console.log(this.users)
+  },
+  computed: {
+    // ...map
+    ...mapState('store', ['users']),
+    ...mapGetters('store', ['getUsers']),
+  },
+  methods: {
+    // ...mapActions('store', ['getMessgaeFromFirebase'])
+    
   }
 };
 </script>
