@@ -43,7 +43,7 @@ export default {
 
   data () {
     return {
-
+      chatTitle: ''
     }
   },
   mounted() {
@@ -54,9 +54,12 @@ export default {
     console.log(this.userDetail, 'userDetail')
   },
   computed: {
-    ...mapState('store', ['userInfo']),
+    ...mapState('store', ['userInfo', 'users']),
     userDetail() {
       return this.userInfo
+    },
+    onChatUser() {
+      // return this.users[this.$route.fullPath.otheruserid].name
     },
     title() {
       let title = ''
@@ -65,11 +68,19 @@ export default {
         return title = 'Users'
       } else if(fullPath == '/Auth') {
         return title = 'Auth'
-      } else if(fullPath = '/Chat') {
-        return title = 'Chat'
+      } else if(fullPath.includes('/Chat')) {
+        return title = this.chatTitle
       }
       return title
     }
+  },
+  async beforeUpdate() {
+    if(this.$route.fullPath.includes('/Chat')) {
+       this.chatTitle = await this.users[this.$route.params.otheruserid].name
+       console.log(this.chatTitle, 'chat titlleeeee')
+       return this.chatTitle
+    }
+      
   },
   methods: {
     ...mapActions('store', ['handleAuthStageChanged'])

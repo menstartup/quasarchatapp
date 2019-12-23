@@ -1,7 +1,7 @@
 export default {
     computed: {
         onChatUser() {
-            return this.users[this.$route.params.otheruserid].name
+            return this.$store.users[this.$route.params.otheruserid].name
         }
     }
 }

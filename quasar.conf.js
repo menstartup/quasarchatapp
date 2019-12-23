@@ -68,7 +68,8 @@ module.exports = function (ctx) {
         'QCard',
         'QSeparator',
         'QTabPanels',
-        'QTabPanel'
+        'QTabPanel',
+        'QBanner'
 
       ],
 

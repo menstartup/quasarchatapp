@@ -44,8 +44,6 @@ export default {
     };
   },
   created() {
-    // this.getMessgaeFromFirebase(this.getUsers)
-    console.log(this.users)
   },
   computed: {
     // ...map
@@ -53,7 +51,6 @@ export default {
     ...mapGetters('store', ['getUsers']),
   },
   methods: {
-    // ...mapActions('store', ['getMessgaeFromFirebase'])
     
   }
 };

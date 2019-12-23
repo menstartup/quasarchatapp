@@ -1,7 +1,7 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-md row">
     <div 
-    class="q-gutter-y-md" 
+    class="q-gutter-y-md col-md-6 offset-md-3 col-xs-12" 
     style="max-width: 600px">
       <q-card>
         <q-tabs

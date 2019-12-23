@@ -60,15 +60,11 @@ const actions = {
     handleAuthStageChanged({commit, dispatch, state}) {
         firebaseAuth.onAuthStateChanged(user => {
             if(user) {
-                console.log('user loged in')
                 let userId = firebaseAuth.currentUser.uid
                 let keyId = ''
-                console.log(userId, 'userid')
                 firebaseDb.ref('users/' + userId).once('value', snapshot => {
-                    console.log(snapshot, 'snapshot')
                     keyId = snapshot.key
                     let userDetail = snapshot.val()
-                    console.log(userDetail, 'userDetail')
                 commit('setUserDetail', {
                     name: userDetail.name,
                     email: userDetail.email,
@@ -86,7 +82,6 @@ const actions = {
              })
 
             } else {
-                console.log('user loged out')
                 dispatch('onUpdateUser', {
                     userId: state.userInfo.userId,
                     update: {
@@ -99,7 +94,6 @@ const actions = {
         })
     },
     onUpdateUser({state}, payload) {
-        console.log(state.userInfo.userId, 'update user online')
         if(payload.userId) {
             firebaseDb.ref('users/' + payload.userId).update(payload.update)
         }
@@ -113,7 +107,6 @@ const actions = {
     },
     firebaseGetUsers({commit}) {
         firebaseDb.ref('users').on('child_added', snapshot => {
-            console.log(snapshot, '12121212')
             let userId = snapshot.key
             let allUsers = snapshot.val()
             commit('setUsers', {
@@ -131,12 +124,9 @@ const actions = {
         })
     },
     getMessgaeFromFirebase({commit, state}, payload) {
-        console.log('hahahahahahaha')
         let otherUserId = payload
-        console.log(otherUserId, 'other user id store')
         messageRef = firebaseDb.ref('chat/' + state.userInfo.userId + '/' + otherUserId)
         messageRef.on('child_added', snapshot => {
-            console.log(snapshot.val(), 'chat messageeeeeeeee')
             let messageId = snapshot.key
             let message = snapshot.val()
             commit('setMessage', {
@@ -150,7 +140,6 @@ const actions = {
             messageRef.off
             commit('deleteMessage')
         }
-        
     },
     getOtherUser({commit, state}, payload) {
         let otherUser = {}
@@ -160,13 +149,17 @@ const actions = {
                 commit('setOtherUser', otherUser)
             }
         })
+    },
+    onSendMessagetoFirebase({commit}, payload) {
+        firebaseDb.ref('chat/' + state.userInfo.userId + '/' + payload.onChatUserId).push(payload.message)
+        payload.message.from = 'them'
+        firebaseDb.ref('chat/' + payload.onChatUserId + '/' + state.userInfo.userId).push(payload.message)
     }
 }
 const getters = {
     getUsers(state) {
         let userFiltered = {}
          Object.keys(state.users).forEach(key => {
-            // console.log(key, 'keyyyyyyyyyyyyy')
            if(key !== state.userInfo.userId) {
                userFiltered[key] = state.users[key]
            }
